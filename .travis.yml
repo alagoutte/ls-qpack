@@ -22,11 +22,18 @@ matrix:
         - name: macOS (xcode 10.1)
           os: osx
           image: xcode10.1
+        - name: Linux (scan-build)
+          os: linux
+          dist: xenial
+          env:
+              - CC=/usr/local/clang/libexec/ccc-analyzer
+              - CXX=/usr/local/clang/libexec/c++-analyzer
+              - EXTRA="scan-build"
 before_install:
   - $CC --version
   - cmake --version
 before_script:
-  - cmake .
+  - ${EXTRA} cmake .
 script:
-  - make
+  - ${EXTRA} make
   - make test
